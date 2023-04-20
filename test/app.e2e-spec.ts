@@ -6,6 +6,10 @@ import { PrismaService } from '../src/prisma/prisma.service';
 import { AuthDto } from '../src/auth/dto';
 import { EditUserDto } from 'src/user/dto';
 import { CreateBookmarkDto, EditBookmarkDto } from 'src/bookmark/dto';
+import {
+	FastifyAdapter,
+	NestFastifyApplication,
+} from '@nestjs/platform-fastify';
 
 describe('App e2e', () => {
 	let app: INestApplication;
@@ -16,7 +20,9 @@ describe('App e2e', () => {
 			imports: [AppModule],
 		}).compile();
 
-		app = moduleRef.createNestApplication();
+		app = moduleRef.createNestApplication<NestFastifyApplication>(
+			new FastifyAdapter({ logger: true }),
+		);
 		app.useGlobalPipes(
 			new ValidationPipe({
 				whitelist: true,
